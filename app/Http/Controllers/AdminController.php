@@ -37,6 +37,29 @@ class AdminController extends Controller
             return response()->json(['status' => 0]);
         }
     }
+    public function saveImportWH(Request $request){
+        DB::beginTransaction();
+        try{
+            DB::statement('call updateExImport(?,?,?,?,?,?)', [$request->WH, $request->EID,$request->Im_Qty,$request->Ex_Qty,$request->ISBN_up,$request->Date_im_ex]);
+            DB::commit();
+            return response()->json(['status' => 1]);}
+        catch(\Exception$e){
+                DB::rollBack();
+                return response()->json(['status' => 0]);
+            }
+        }
+        public function processTransaction(Request $request){
+            DB::beginTransaction();
+            try{
+                DB::statement('call updateTransaction(?,?,?)', [$request->pdate, $request->id,$request->status_in]);
+                DB::commit();
+                return response()->json(['status' => 1]);}
+            catch(\Exception$e){
+                    DB::rollBack();
+                    return response()->json(['status' => 0]);
+                }
+            }
+
 
     public function getAllIsbn(Request $request){
         return DB::select('call viewAllISBN(?)', [$request->dateneed]);}

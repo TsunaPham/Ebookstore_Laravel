@@ -40,11 +40,12 @@
         <h1 class='header-admin'>Admin Dashboard</h1>
         <ul class="list-group">
             <li class="list-group-item"><a href='#import-books'><i class="fas fa-file-import"></i>  Import books</a></li>
+            <li class="list-group-item"><a href='#import-wh'><i class="fas fa-file-import"></i>  Import/Export Into Warehouse</a></li>
+            <li class="list-group-item"><a href='#process-transaction'><i class="fas fa-file-import"></i> Process Error Online Transaction</a></li>
             <li class="list-group-item"><a href='#report'><i class="fas fa-chart-bar"></i>  Report</a></li>
         </ul>
         <div id='import-books' class='mt-5'>
             <h3 class='header'>Import books</h3>
-            <h5>(i.1)</h5>
             <div class='mt-3'>
                 <form>
                     <div class="input-group mb-3">
@@ -84,6 +85,78 @@
                         <input type="text" class="form-control" placeholder="Link image" id='image'>
                     </div>
                     <button class='btn btn-primary float-right' id='save-import-book'>Save</button>
+                </form>
+            </div>
+        </div>
+
+        <div id='import-wh' class='mt-5'>
+            <h3 class='header'>Import/Export into Warehouse</h3>
+            <div class='mt-3'>
+                <form>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Warehouse name</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Warehouse Name" id='WH1'>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Employee ID</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Employee" id='Em1'>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Import Quantity</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Import Quantity" id='Im1'>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Export Quantity</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Export Quantity" id='Ex1'>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">ISBN</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="ISBN" id='ISBN1'>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Date Import/Export</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Date" id='Date1'>
+                    </div>
+                    <button class='btn btn-primary float-right' id='save-import-wh'>Save</button>
+                </form>
+            </div>
+        </div>
+
+        <div id='process-transaction' class='mt-5'>
+            <h3 class='header'>Process Error Online Transaction</h3>
+            <div class='mt-3'>
+                <form>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Transaction Date</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Date" id='Date2'>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Customer ID</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Customer" id='Cus2'>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Status to Edit :WAITING,EXPORT,SUCCESS</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Status" id='Status2'>
+                    </div>
+                    <button class='btn btn-primary float-right' id='process-trans'>Process</button>
                 </form>
             </div>
         </div>
@@ -591,6 +664,49 @@ $(document).ready(function() {
                 }
                 else
                     toastr.error('Import fail!');
+            }
+        });
+    });
+    $('#save-import-wh').click(function(){
+        $.ajax({
+            url: "{{ route('saveImportWH') }}",
+            method: "POST",
+            data: {
+                WH: $('#WH1').val(),
+                EID: $('#Em1').val(),
+                Im_Qty: $('#Im1').val(),
+                Ex_Qty: $('#Ex1').val(),
+                ISBN_up: $('#ISBN1').val(),
+                Date_im_ex: $('#Date1').val()
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.status){
+                    toastr.success('Import/Export success!');
+                    $("input").val('');
+                }
+                else
+                    toastr.error('Import/Export fail!');
+            }
+        });
+    });
+    $('#process-trans').click(function(){
+        $.ajax({
+            url: "{{ route('processTransaction') }}",
+            method: "POST",
+            data: {
+                pdate: $('#Date2').val(),
+                id: $('#Cus2').val(),
+                status_in: $('#Status2').val()
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.status){
+                    toastr.success('Process success!');
+                    $("input").val('');
+                }
+                else
+                    toastr.error('Process fail!');
             }
         });
     });

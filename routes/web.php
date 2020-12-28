@@ -39,6 +39,21 @@ Route::post('save-customer-info', 'CustomerController@saveCustomerInfo')->name('
 
 Route::post('save-import-book', 'AdminController@saveImportBooks')->name('saveImportBooks');
 
+Route::post('save-import-wh', 'AdminController@saveImportWH')->name('saveImportWH');
+
+Route::post('process-trans', 'AdminController@processTransaction')->name('processTransaction');
+
+Route::get('get-all-book-by-cate', 'BookController@getAllByCategory')->name('getAllByCategory');
+
+Route::get('get-all-book-by-author', 'BookController@getAllByAuthor')->name('getAllByAuthor');
+
+Route::get('get-all-book-by-publish-year', 'BookController@getAllByPublishYear')->name('getAllByPublishYear');
+
+Route::get('get-all-author-by-cate', 'BookController@getAllAuthorByCate')->name('getAllAuthorByCate');
+
+Route::get('get-all-book-by-key', 'BookController@getAllByKey')->name('getAllByKey');
+
+
 Route::get('get-all-isbn', 'AdminController@getAllIsbn')->name('getAllIsbn');
 
 Route::get('get-sum-of-isbn', 'AdminController@getSumOfISBN')->name('getSumOfISBN');

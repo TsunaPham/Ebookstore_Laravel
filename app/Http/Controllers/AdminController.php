@@ -97,8 +97,25 @@ class AdminController extends Controller
         return DB::select('call WHExportMost(?,?)', [$request->from_time, $request->next_time]);
     }
 
-
-
-
-
+    public function getDSSach_MuaTrongThang(Request $request){
+        return DB::select('call DSSach_MuaTrongThang(?,?,?)', [$request->id,$request->start_date, $request->end_date]);
+    }
+    public function getDSSach_GiaoDichTrongThang(Request $request){
+        return DB::select('call DSSach_GiaoDichTrongThang(?,?,?)', [$request->id,$request->start_date, $request->end_date]);
+    }
+    public function getDSSach_SuCoTrongThang(Request $request){
+        return DB::select('call DSSach_SuCoTrongThang(?,?,?)', [$request->id,$request->start_date, $request->end_date]);
+    }
+    public function getDSSach_ChuaHoanThanh(Request $request){
+        return DB::select('call DSSach_ChuaHoanThanh(?)', [$request->id]);
+    }
+    public function getSumByField(Request $request){
+        return DB::select('call SumByField(?,?,?)', [$request->id,$request->from_time, $request->next_time]);
+    }
+    public function getTransactionHaveMostBook(Request $request){
+        return DB::select('call TransactionHaveMostBook(?,?,?)', [$request->id,$request->from_time, $request->next_time]);
+    }
+    public function getTransactionhaveboth(Request $request){
+        return DB::select('call viewTransactionhaveboth(?,?,?)', [$request->id,$request->from_time, $request->next_time]);
+    }
 }

@@ -23,6 +23,10 @@ Route::get('contact-us', function(){
     return view('contact-us');
 })->name('contact-us');
 
+Route::get('order-his', function(){
+    return view('order-his');
+})->name('order-his');
+
 Route::post('login', 'AuthController@login')->name('login');
 
 Route::post('logout', 'AuthController@logout')->name('logout');
@@ -53,6 +57,8 @@ Route::get('get-all-author-by-cate', 'BookController@getAllAuthorByCate')->name(
 
 Route::get('get-all-book-by-key', 'BookController@getAllByKey')->name('getAllByKey');
 
+Route::post('payment', 'BookController@payment')->name('payment');
+
 
 Route::get('get-all-isbn', 'AdminController@getAllIsbn')->name('getAllIsbn');
 
@@ -77,6 +83,19 @@ Route::get('get-wh-have-isbn-less-than-n', 'AdminController@getWHhaveISBNlesstha
 
 Route::get('get-wh-export-most', 'AdminController@getWHExportMost')->name('getWHExportMost');
 
+Route::get('get-ds-sach-mua-trong-thang', 'AdminController@getDSSach_MuaTrongThang')->name('getDSSach_MuaTrongThang');
+
+Route::get('get-ds-giao-dich-trong-thang', 'AdminController@getDSSach_GiaoDichTrongThang')->name('getDSSach_GiaoDichTrongThang');
+
+Route::get('get-ds-su-co-trong-thang', 'AdminController@getDSSach_SuCoTrongThang')->name('getDSSach_SuCoTrongThang');
+
+Route::get('get-ds-chua-hoan-thanh', 'AdminController@getDSSach_ChuaHoanThanh')->name('getDSSach_ChuaHoanThanh');
+
+Route::get('get-sum-by-field', 'AdminController@getSumByField')->name('getSumByField');
+
+Route::get('get-transaction-have-most-book', 'AdminController@getTransactionHaveMostBook')->name('getTransactionHaveMostBook');
+
+Route::get('get-transaction-have-both', 'AdminController@getTransactionhaveboth')->name('getTransactionhaveboth');
 
 
 

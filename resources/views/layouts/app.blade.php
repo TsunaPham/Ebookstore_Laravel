@@ -24,7 +24,7 @@
         .shop-now {
             width: 180px;
             height: 50px;
-            border: 3px solid #fff;    
+            border: 3px solid #fff;
             background-color: rgba(255,255,255,0);
             color: #fff;
             font-size:15px;
@@ -32,12 +32,36 @@
 
         .shop-now:hover {
             background-color: #3490dc;
-            border: 3px solid #3490dc;    
+            border: 3px solid #3490dc;
         }
 
         #menu-list > li > a:hover {
             background-color: #3490dc;
             color: #fff;
+        }
+
+        .badge {
+            padding-left: 9px;
+            padding-right: 9px;
+            border-radius: 9px;
+        }
+
+        .label-warning[href],
+        .badge-warning[href] {
+            background-color: #c67605;
+        }
+
+        #lblCartCount {
+            font-size: 12px;
+            background: #ff0000;
+            color: #fff;
+            padding: 0 5px;
+            vertical-align: top;
+            margin-left: -10px;
+        }
+
+        .modal-lg {
+            max-width: 80% !important;
         }
 
     </style>

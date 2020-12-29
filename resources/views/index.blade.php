@@ -88,7 +88,7 @@
                     <div class="row mt-5">
                         <div class="col-sm-6">
                             <div class="card shadow">
-                                <div class="card-body">
+                                <div class="card-body" data-isbn="{{$book->ISBN}}">
                                     <img class="card-img-top" src="{{$book->IMAGE}}" alt="Harry Potter" height='700' width='400'>
                                     <h5 class="card-title mt-3"><strong>{{$book->TITLE}}</strong></h5>
                                     <p class="card-text">Publisher: {{$book->PUBLISHER_NAME}}</p>
@@ -101,7 +101,7 @@
                 @else
                         <div class="col-sm-6">
                             <div class="card shadow">
-                                <div class="card-body">
+                                <div class="card-body" data-isbn="{{$book->ISBN}}">
                                     <img class="card-img-top" src="{{$book->IMAGE}}" alt="Harry Potter" height='700' width='400'>
                                     <h5 class="card-title mt-3"><strong>{{$book->TITLE}}</strong></h5>
                                     <p class="card-text">Publisher: {{$book->PUBLISHER_NAME}}</p>
@@ -129,13 +129,13 @@ $(document).ready(function() {
             e += `<div class="row mt-5">
                     <div class="col-sm-6">
                         <div class="card shadow">
-                            <div class="card-body">
+                            <div class="card-body" data-isbn=${data[0].ISBN}>
                                 <img class="card-img-top" src="${data[0].IMAGE}" alt="Harry Potter" height='700' width='400'>
                                 <h5 class="card-title mt-3"><strong>${data[0].TITLE}</strong></h5>
                                 <p class="card-text">Publisher: ${data[0].PUBLISHER_NAME}</p>
                                 <p class="card-text">Description: test</p>
                                 <p class="card-text">Price: <strong>${data[0].PRICE}</strong> VND</p>
-                                <a href="#" class="btn btn-danger"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                                <a href="javascript:void(0)" class="btn btn-danger add-to-cart"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                             </div>
                         </div>
                     </div>
@@ -147,26 +147,26 @@ $(document).ready(function() {
                     e += `<div class="row mt-5">
                             <div class="col-sm-6">
                                 <div class="card shadow">
-                                    <div class="card-body">
+                                    <div class="card-body" data-isbn=${val.ISBN}>
                                         <img class="card-img-top" src="${val.IMAGE}" alt="Harry Potter" height='700' width='400'>
                                         <h5 class="card-title mt-3"><strong>${val.TITLE}</strong></h5>
                                         <p class="card-text">Publisher: ${val.PUBLISHER_NAME}</p>
                                         <p class="card-text">Description: test</p>
                                         <p class="card-text">Price: <strong>${val.PRICE}</strong> VND</p>
-                                        <a href="#" class="btn btn-danger"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                                        <a href="javascript:void(0)" class="btn btn-danger add-to-cart"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                                     </div>
                                 </div>
                             </div>`;
                 else
                     e += `<div class="col-sm-6">
                                 <div class="card shadow">
-                                    <div class="card-body">
+                                    <div class="card-body" data-isbn=${val.ISBN}>
                                         <img class="card-img-top" src="${val.IMAGE}" alt="Harry Potter" height='700' width='400'>
                                         <h5 class="card-title mt-3"><strong>${val.TITLE}</strong></h5>
                                         <p class="card-text">Publisher: ${val.PUBLISHER_NAME}</p>
                                         <p class="card-text">Description: test</p>
                                         <p class="card-text">Price: <strong>${val.PRICE}</strong> VND</p>
-                                        <a href="#" class="btn btn-danger"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                                        <a href="javascript:void(0)" class="btn btn-danger add-to-cart"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                                     </div>
                                 </div>
                             </div>
@@ -276,7 +276,7 @@ $(document).ready(function() {
         });
     });
 
-    $('.add-to-cart').click(function(){
+    $(document).on('click', '.add-to-cart', function(){
         let isLogin = 0;
         @if(session()->has('cid'))
             isLogin = 1;
@@ -286,8 +286,68 @@ $(document).ready(function() {
         else{
             toastr.success('Add success!');
             $('#lblCartCount').text(parseInt($('#lblCartCount').text()) + 1);
+            let data = $(this).parent().children();
+            let isbn = $(this).parent().attr('data-isbn');
+            var sub = parseInt($('#totalLabel').text());
+            var len = data.eq(4).text().length;
+            var bprice = parseInt(data.eq(4).text().substr(7,len-11));
+            $('#totalLabel').text(sub+bprice);
+            let e = `<div class='d-flex mb-4'>
+                        <img src=${data.eq(0).attr('src')} style='width:200px;height:150px'>
+                        <div class='w-75 ml-3 mr-3' style='overflow:hidden'>
+                            <h5><strong>${data.eq(1).text()}</strong></h5>
+                            <h6><strong>${data.eq(4).text()}</strong></h6>
+                            <a href="javascript:void(0)" id="remove-${isbn}">Remove</a>
+                        </div>
+                        <div class='w-25 mr-3 d-flex align-items-center justify-content-center'>
+                            <div class="input-group" style='width:120px'>
+                                <div class="input-group-prepend" style='cursor:pointer' onclick="decTotal(this)">
+                                    <span class="input-group-text">-</span>
+                                </div>
+                                <input type="text" class="form-control" value='1' id="totalBuy">
+                                <div class="input-group-append" style='cursor:pointer' onclick="incTotal(this)">
+                                    <span class="input-group-text">+</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type='hidden' value=${isbn} id="isbn">
+                    </div>`;
+            $('#cart > div > div > div.modal-body').append(e);
         }
     });
+    $('#payment').click(function(){
+        // let isbnList = [];
+        $.ajax({
+            url: "{{ route('payment') }}",
+            method: "POST",
+            data: {
+                isbn: $('#isbn').val(),
+                total: $('#totalBuy').val(),
+                cid: {{session()->get('cid')}}
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.status)
+                    toastr.success('Thank you!');
+                else
+                    toastr.error('Something error!');
+                location.reload();
+            }
+        });
+    });
+    $(document).on('click', "[id^='remove']", function(){
+        $('.cart-header').text(`Your cart (0)`);
+        $('#lblCartCount').text(0);
+        $('#payment').prop('disabled', true);
+        $(this).parent().parent().remove();
+    });
 });
+function decTotal(t){
+    $(t).parent().children().eq(1).val($(t).parent().children().eq(1).val() - 1);
+
+}
+function incTotal(t){
+    $(t).parent().children().eq(1).val(parseInt($(t).parent().children().eq(1).val()) + 1);
+}
 </script>
 @endpush

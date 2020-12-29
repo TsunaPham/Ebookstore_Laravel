@@ -253,7 +253,7 @@
                     <input type="text" class="form-control" placeholder="Select date" id='date-view-isbn13'>
                 </div>
                 <button class='btn btn-primary' id='b-i13'>View</button>
-                <h4 id='i3'></h4>
+                <h4 id='i13'></h4>
                 <h5>Xem danh sách kho hàng có số sách tính theo mỗi ISBN dưới 10 quyển trong một ngày. </h5>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
